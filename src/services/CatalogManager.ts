@@ -3,7 +3,7 @@ import { Application, CatalogPage } from '../models/types';
 import { IApplicationRepository } from '../repositories/interfaces';
 
 export class CatalogManager {
-  private catalogUrl: string = 'https://username.github.io/electron-app-downloader/catalog.json';
+  private catalogUrl: string = 'https://alphaleadership.github.io/appstore/catalog.json';
 
   constructor(private appRepo: IApplicationRepository) {}
 
