@@ -17,6 +17,11 @@ export class DownloadManager {
   ) {}
 
   async startDownload(appId: string, url: string): Promise<void> {
+    // Requirement 9.3: THE Gestionnaire_Téléchargement SHALL utiliser HTTPS for all downloads.
+    if (url.startsWith('http://')) {
+      throw new Error('Insecure download URL: HTTPS is required');
+    }
+
     if (this.activeDownloads.has(appId)) return;
     if (this.activeDownloads.size >= 3) {
       throw new Error('Maximum parallel downloads reached');

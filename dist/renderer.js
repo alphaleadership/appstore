@@ -611,6 +611,7 @@ class CatalogueView {
     searchInput;
     categorySelect;
     loadingIndicator;
+    currentApps = [];
     constructor(rootId) {
         this.rootId = rootId;
         const root = document.getElementById(rootId);
@@ -652,8 +653,12 @@ class CatalogueView {
         });
     }
     displayCatalog(apps) {
+        this.currentApps = apps;
         this.appList.innerHTML = '';
         apps.forEach(app => this.addAppCard(app));
+    }
+    getAppById(id) {
+        return this.currentApps.find(app => app.id === id);
     }
     addAppCard(app) {
         const card = document.createElement('div');
@@ -886,6 +891,16 @@ class SettingsView {
 exports.SettingsView = SettingsView;
 
 
+/***/ },
+
+/***/ "electron"
+/*!***************************!*\
+  !*** external "electron" ***!
+  \***************************/
+(module) {
+
+module.exports = require("electron");
+
 /***/ }
 
 /******/ 	});
@@ -1061,9 +1076,19 @@ settingsView.displayDiskUsage({
     availableBytes: 5000 * 1024 * 1024,
     totalBytes: 10000 * 1024 * 1024
 });
-catalogueView.onDownload = (appId) => {
-    console.log('Downloading app:', appId);
+catalogueView.onDownload = async (appId) => {
+    const app = catalogueView.getAppById(appId);
+    if (app) {
+        await ipcRenderer.invoke('download:start', appId, app.downloadUrl);
+    }
 };
+const { ipcRenderer } = __webpack_require__(/*! electron */ "electron");
+ipcRenderer.on('download:progress', (event, progress) => {
+    catalogueView.updateProgress(progress.appId, progress);
+});
+ipcRenderer.on('download:error', (event, { appId, error }) => {
+    catalogueView.showError(`Download failed for app ${appId}: ${error}`);
+});
 
 })();
 

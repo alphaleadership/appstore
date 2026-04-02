@@ -3,14 +3,14 @@ import { CatalogManager } from '../services/CatalogManager';
 import { DownloadManager } from '../services/DownloadManager';
 import { StorageManager } from '../services/StorageManager';
 import { AppLauncher } from '../services/AppLauncher';
-import { SQLiteApplicationRepository, SQLiteDownloadedAppRepository, SQLitePreferencesRepository } from '../repositories/sqlite';
+import { LowdbApplicationRepository, LowdbDownloadedAppRepository, LowdbPreferencesRepository } from '../repositories/lowdb';
 import { IntegrityChecker } from '../services/IntegrityChecker';
 import { DownloadProgress } from '../models/types';
 
 export function setupIPC() {
-  const appRepo = new SQLiteApplicationRepository();
-  const downloadedAppRepo = new SQLiteDownloadedAppRepository();
-  const prefRepo = new SQLitePreferencesRepository();
+  const appRepo = new LowdbApplicationRepository();
+  const downloadedAppRepo = new LowdbDownloadedAppRepository();
+  const prefRepo = new LowdbPreferencesRepository();
 
   const catalogManager = new CatalogManager(appRepo);
   const integrityChecker = new IntegrityChecker();
@@ -42,6 +42,10 @@ export function setupIPC() {
 
   downloadManager.onDownloadComplete((appId: string) => {
     eventSender('download:complete', appId);
+  });
+
+  downloadManager.onDownloadError((appId: string, error: Error) => {
+    eventSender('download:error', { appId, error: error.message });
   });
 
   // Storage IPC

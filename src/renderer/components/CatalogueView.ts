@@ -6,6 +6,7 @@ export class CatalogueView {
   private searchInput: HTMLInputElement;
   private categorySelect: HTMLSelectElement;
   private loadingIndicator: HTMLElement;
+  private currentApps: Application[] = [];
 
   constructor(private rootId: string) {
     const root = document.getElementById(rootId);
@@ -53,8 +54,13 @@ export class CatalogueView {
   }
 
   displayCatalog(apps: Application[]) {
+    this.currentApps = apps;
     this.appList.innerHTML = '';
     apps.forEach(app => this.addAppCard(app));
+  }
+
+  getAppById(id: string): Application | undefined {
+    return this.currentApps.find(app => app.id === id);
   }
 
   private addAppCard(app: Application) {

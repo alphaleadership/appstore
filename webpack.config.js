@@ -33,9 +33,7 @@ const mainConfig = {
     filename: 'main.js',
     path: path.resolve(__dirname, 'dist'),
   },
-  externals: {
-    'better-sqlite3': 'commonjs better-sqlite3',
-  },
+  externals: {},
 };
 
 const rendererConfig = {

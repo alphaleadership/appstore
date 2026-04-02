@@ -96,6 +96,19 @@ settingsView.displayDiskUsage({
   totalBytes: 10000 * 1024 * 1024
 });
 
-catalogueView.onDownload = (appId) => {
-  console.log('Downloading app:', appId);
+catalogueView.onDownload = async (appId) => {
+  const app = catalogueView.getAppById(appId);
+  if (app) {
+    await ipcRenderer.invoke('download:start', appId, app.downloadUrl);
+  }
 };
+
+const { ipcRenderer } = require('electron');
+
+ipcRenderer.on('download:progress', (event: any, progress: any) => {
+  catalogueView.updateProgress(progress.appId, progress);
+});
+
+ipcRenderer.on('download:error', (event: any, { appId, error }: { appId: string, error: string }) => {
+  catalogueView.showError(`Download failed for app ${appId}: ${error}`);
+});

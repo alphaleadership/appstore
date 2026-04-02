@@ -28,6 +28,17 @@ app.whenReady().then(() => {
   });
 });
 
+app.on('certificate-error', (event, webContents, url, error, certificate, callback) => {
+  // Requirement 9.3: THE Gestionnaire_Téléchargement SHALL utiliser HTTPS for all downloads.
+  // We should be careful about ignoring errors.
+  console.error(`SSL Certificate error for ${url}: ${error}`);
+  
+  // For now, let's allow the user to proceed if they want, but in a real app
+  // we might want to show a dialog. 
+  // event.preventDefault();
+  // callback(true);
+});
+
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();
 });
