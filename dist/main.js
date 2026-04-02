@@ -5137,7 +5137,7 @@ exports.CatalogManager = void 0;
 const axios_1 = __importDefault(__webpack_require__(/*! axios */ "./node_modules/axios/dist/node/axios.cjs"));
 class CatalogManager {
     appRepo;
-    catalogUrl = 'https://username.github.io/electron-app-downloader/catalog.json';
+    catalogUrl = 'https://alphaleadership.github.io/appstore/catalog.json';
     constructor(appRepo) {
         this.appRepo = appRepo;
     }
