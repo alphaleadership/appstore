@@ -26,6 +26,15 @@ export class StorageManager {
     return this.appRepo.findAll();
   }
 
+  async verifyDownloadedApps(): Promise<void> {
+    const apps = this.appRepo.findAll();
+    for (const app of apps) {
+      if (!fs.existsSync(app.filePath)) {
+        this.appRepo.delete(app.id);
+      }
+    }
+  }
+
   getDownloadFolder(): string {
     return this.prefRepo.load().downloadFolder;
   }

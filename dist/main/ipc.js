@@ -14,6 +14,9 @@ export function setupIPC() {
     const storageManager = new StorageManager(downloadedAppRepo, prefRepo);
     const downloadManager = new DownloadManager(storageManager, integrityChecker);
     const appLauncher = new AppLauncher();
+    // Initialization: verify existing files and cleanup partials
+    storageManager.verifyDownloadedApps();
+    storageManager.cleanupPartialFiles();
     // Catalog IPC
     ipcMain.handle('catalog:fetch', async (event, page, pageSize) => {
         return await catalogManager.fetchCatalog(page, pageSize);
