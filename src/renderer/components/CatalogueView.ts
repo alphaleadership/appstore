@@ -1,4 +1,4 @@
-import { Application, DownloadProgress } from '../../models/types';
+import { Application, DownloadProgress } from '../../models/types.js';
 
 export class CatalogueView {
   private container: HTMLElement;

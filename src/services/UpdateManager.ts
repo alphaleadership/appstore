@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { EventEmitter } from 'events';
-import { UpdateInfo } from '../models/types';
+import { UpdateInfo } from '../models/types.js';
 
 export class UpdateManager extends EventEmitter {
   private updateUrl: string = 'https://username.github.io/electron-app-downloader/updates.json';

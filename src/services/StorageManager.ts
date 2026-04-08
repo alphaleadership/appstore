@@ -1,8 +1,8 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { DownloadedApp, UserPreferences, DiskUsage } from '../models/types';
-import { IDownloadedAppRepository, IPreferencesRepository } from '../repositories/interfaces';
-import { checkDiskSpace } from './utils'; // Assuming I'll create some utils
+import { DownloadedApp, UserPreferences, DiskUsage } from '../models/types.js';
+import { IDownloadedAppRepository, IPreferencesRepository } from '../repositories/interfaces.js';
+import { checkDiskSpace } from './utils.js'; // Assuming I'll create some utils
 
 export class StorageManager {
   constructor(

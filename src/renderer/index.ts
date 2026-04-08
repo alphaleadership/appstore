@@ -1,7 +1,6 @@
-import './style.css';
-import { CatalogueView } from './components/CatalogueView';
-import { DownloadedAppsView } from './components/DownloadedAppsView';
-import { SettingsView } from './components/SettingsView';
+import { CatalogueView } from './components/CatalogueView.js';
+import { DownloadedAppsView } from './components/DownloadedAppsView.js';
+import { SettingsView } from './components/SettingsView.js';
 
 console.log('Renderer process started');
 
@@ -52,7 +51,7 @@ catalogueView.displayCatalog([
     description: 'Code editor',
     category: 'Development',
     author: 'Microsoft',
-    downloadUrl: 'https://example.com/vscode.exe',
+    downloadUrl: 'https://update.code.visualstudio.com/latest/win32-x64-user/stable',
     fileSize: 150000000,
     checksum: 'sha256:abc123',
     signature: 'sig123',
@@ -96,14 +95,14 @@ settingsView.displayDiskUsage({
   totalBytes: 10000 * 1024 * 1024
 });
 
+const { ipcRenderer } = (window as any).require('electron');
+
 catalogueView.onDownload = async (appId) => {
   const app = catalogueView.getAppById(appId);
   if (app) {
     await ipcRenderer.invoke('download:start', appId, app.downloadUrl);
   }
 };
-
-const { ipcRenderer } = require('electron');
 
 ipcRenderer.on('download:progress', (event: any, progress: any) => {
   catalogueView.updateProgress(progress.appId, progress);

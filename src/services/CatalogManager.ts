@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { Application, CatalogPage } from '../models/types';
-import { IApplicationRepository } from '../repositories/interfaces';
+import { Application, CatalogPage } from '../models/types.js';
+import { IApplicationRepository } from '../repositories/interfaces.js';
 
 export class CatalogManager {
   private catalogUrl: string = 'https://alphaleadership.github.io/appstore/catalog.json';

@@ -1,7 +1,14 @@
 import { app, BrowserWindow } from 'electron';
 import * as path from 'path';
-import { initDb } from '../repositories/db';
-import { setupIPC } from './ipc';
+import { fileURLToPath } from 'url';
+import { initDb } from '../repositories/db.js';
+import { setupIPC } from './ipc.js';
+
+// Workaround for 'unable to get local issuer certificate'
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 function createWindow() {
   const mainWindow = new BrowserWindow({
@@ -13,7 +20,7 @@ function createWindow() {
     },
   });
 
-  mainWindow.loadFile(path.join(__dirname, 'index.html'));
+  mainWindow.loadFile(path.join(__dirname, '..', 'renderer', 'index.html'));
   // Open the DevTools.
   // mainWindow.webContents.openDevTools();
 }

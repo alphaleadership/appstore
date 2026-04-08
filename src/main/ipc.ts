@@ -1,11 +1,11 @@
-import { ipcMain } from 'electron';
-import { CatalogManager } from '../services/CatalogManager';
-import { DownloadManager } from '../services/DownloadManager';
-import { StorageManager } from '../services/StorageManager';
-import { AppLauncher } from '../services/AppLauncher';
-import { LowdbApplicationRepository, LowdbDownloadedAppRepository, LowdbPreferencesRepository } from '../repositories/lowdb';
-import { IntegrityChecker } from '../services/IntegrityChecker';
-import { DownloadProgress } from '../models/types';
+import { ipcMain, BrowserWindow } from 'electron';
+import { CatalogManager } from '../services/CatalogManager.js';
+import { DownloadManager } from '../services/DownloadManager.js';
+import { StorageManager } from '../services/StorageManager.js';
+import { AppLauncher } from '../services/AppLauncher.js';
+import { LowdbApplicationRepository, LowdbDownloadedAppRepository, LowdbPreferencesRepository } from '../repositories/lowdb.js';
+import { IntegrityChecker } from '../services/IntegrityChecker.js';
+import { DownloadProgress } from '../models/types.js';
 
 export function setupIPC() {
   const appRepo = new LowdbApplicationRepository();
@@ -68,7 +68,6 @@ export function setupIPC() {
 }
 
 function eventSender(channel: string, data: any) {
-  const { BrowserWindow } = require('electron');
   const win = BrowserWindow.getAllWindows()[0];
   if (win) {
     win.webContents.send(channel, data);

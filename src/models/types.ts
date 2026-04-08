@@ -6,6 +6,7 @@ export interface Application {
   category: string;
   author: string;
   downloadUrl: string;
+  repository?: string;
   fileSize: number;
   checksum: string; // SHA-256
   signature: string;

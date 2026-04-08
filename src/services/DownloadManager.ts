@@ -1,9 +1,9 @@
 import axios from 'axios';
 import * as fs from 'fs';
 import * as path from 'path';
-import { DownloadProgress, AppStatus } from '../models/types';
-import { IntegrityChecker } from './IntegrityChecker';
-import { StorageManager } from './StorageManager';
+import { DownloadProgress, AppStatus } from '../models/types.js';
+import { IntegrityChecker } from './IntegrityChecker.js';
+import { StorageManager } from './StorageManager.js';
 
 export class DownloadManager {
   private activeDownloads: Map<string, any> = new Map();

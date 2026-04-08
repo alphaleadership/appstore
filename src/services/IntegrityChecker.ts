@@ -1,6 +1,6 @@
 import * as crypto from 'crypto';
 import * as fs from 'fs';
-import { FileMetadata, ValidationResult } from '../models/types';
+import { FileMetadata, ValidationResult } from '../models/types.js';
 
 export class IntegrityChecker {
   async calculateChecksum(filePath: string): Promise<string> {

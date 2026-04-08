@@ -1,4 +1,4 @@
-import { Application, DownloadedApp, UserPreferences } from '../models/types';
+import { Application, DownloadedApp, UserPreferences } from '../models/types.js';
 
 export interface IApplicationRepository {
   save(app: Application): void;

@@ -1,11 +1,12 @@
 {
   "name": "appstore",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "AppStore Downloader",
-  "main": "dist/main.js",
+  "main": "dist/main/main.js",
   "scripts": {
-    "build": "webpack",
-    "watch": "webpack --watch",
+    "build": "tsc && npm run copy-assets",
+    "copy-assets": "node -e \"const fs=require('fs'); if(!fs.existsSync('dist/renderer')) fs.mkdirSync('dist/renderer', {recursive:true}); fs.copyFileSync('src/renderer/index.html', 'dist/renderer/index.html'); fs.copyFileSync('src/renderer/style.css', 'dist/renderer/style.css');\"",
+    "watch": "tsc --watch",
     "start": "npm run build && electron .",
     "dist": "npm run build && electron-builder",
     "test": "jest"
@@ -28,32 +29,23 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "devDependencies": {
     "@types/jest": "^30.0.0",
     "@types/node": "^25.5.0",
     "cross-spawn": "^7.0.6",
-    "css-loader": "^7.1.4",
     "electron": "^41.1.1",
     "electron-builder": "^26.8.1",
     "fast-check": "^4.6.0",
-    "html-webpack-plugin": "^5.6.6",
     "jest": "^30.3.0",
-    "style-loader": "^4.0.0",
     "ts-jest": "^29.4.9",
-    "ts-loader": "^9.5.7",
     "ts-node": "^10.9.2",
-    "typescript": "^6.0.2",
-    "webpack": "^5.105.4",
-    "webpack-cli": "^7.0.2"
+    "typescript": "^6.0.2"
   },
   "dependencies": {
     "@types/lowdb": "^1.0.11",
     "axios": "^1.14.0",
     "lowdb": "^1.0.0"
-  },
-  "overrides": {
-    "cross-spawn": "^7.0.6"
   },
   "trustedDependencies": [
     "unrs-resolver"

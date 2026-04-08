@@ -1,4 +1,4 @@
-import { Application, DownloadedApp, UserPreferences } from './types';
+import { Application, DownloadedApp, UserPreferences } from './types.js';
 
 export function isApplication(obj: any): obj is Application {
   return (

@@ -1,4 +1,4 @@
-import { UserPreferences, DiskUsage } from '../../models/types';
+import { UserPreferences, DiskUsage } from '../../models/types.js';
 
 export class SettingsView {
   private container: HTMLElement;

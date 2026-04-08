@@ -1,4 +1,4 @@
-import { DownloadedApp } from '../../models/types';
+import { DownloadedApp } from '../../models/types.js';
 
 export class DownloadedAppsView {
   private container: HTMLElement;
