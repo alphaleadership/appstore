@@ -56,6 +56,7 @@
   "dependencies": {
     "@types/lowdb": "^1.0.11",
     "axios": "^1.14.0",
+    "electron-log": "^5.4.3",
     "lowdb": "^1.0.0"
   },
   "trustedDependencies": [
