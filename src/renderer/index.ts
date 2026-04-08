@@ -1,8 +1,11 @@
 import { CatalogueView } from './components/CatalogueView.js';
 import { DownloadedAppsView } from './components/DownloadedAppsView.js';
 import { SettingsView } from './components/SettingsView.js';
+import { createLogger } from '../utils/logger.js';
 
-console.log('Renderer process started');
+const logger = createLogger('Renderer');
+
+logger.info('Renderer process started');
 
 const rootId = 'root';
 const root = document.getElementById(rootId);

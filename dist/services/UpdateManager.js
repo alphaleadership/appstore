@@ -1,5 +1,7 @@
 import axios from 'axios';
 import { EventEmitter } from 'events';
+import { createLogger } from '../utils/logger.js';
+const logger = createLogger('UpdateManager');
 export class UpdateManager extends EventEmitter {
     updateUrl = 'https://username.github.io/electron-app-downloader/updates.json';
     async checkForUpdates() {
@@ -16,7 +18,7 @@ export class UpdateManager extends EventEmitter {
             return null;
         }
         catch (error) {
-            console.error('Error checking for updates:', error);
+            logger.error('Error checking for updates:', error);
             return null;
         }
     }

@@ -1,6 +1,9 @@
 import axios from 'axios';
 import { Application, CatalogPage } from '../models/types.js';
 import { IApplicationRepository } from '../repositories/interfaces.js';
+import { createLogger } from '../utils/logger.js';
+
+const logger = createLogger('CatalogManager');
 
 export class CatalogManager {
   private catalogUrl: string = 'https://alphaleadership.github.io/appstore/catalog.json';
@@ -19,7 +22,7 @@ export class CatalogManager {
       
       return data;
     } catch (error) {
-      console.error('Error fetching catalog:', error);
+      logger.error('Error fetching catalog:', error);
       // Fallback to local cache if offline
       const allApps = this.appRepo.findAll();
       const start = (page - 1) * pageSize;

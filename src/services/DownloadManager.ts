@@ -4,6 +4,9 @@ import * as path from 'path';
 import { DownloadProgress, AppStatus } from '../models/types.js';
 import { IntegrityChecker } from './IntegrityChecker.js';
 import { StorageManager } from './StorageManager.js';
+import { createLogger } from '../utils/logger.js';
+
+const logger = createLogger('DownloadManager');
 
 export class DownloadManager {
   private activeDownloads: Map<string, any> = new Map();
@@ -103,7 +106,7 @@ export class DownloadManager {
     } catch (error: any) {
       this.activeDownloads.delete(appId);
       if (axios.isCancel(error)) {
-        console.log('Download canceled:', appId);
+        logger.info('Download canceled:', appId);
       } else {
         this.errorCallbacks.forEach(cb => cb(appId, error));
       }

@@ -1,6 +1,8 @@
 import axios from 'axios';
 import * as fs from 'fs';
 import * as path from 'path';
+import { createLogger } from '../utils/logger.js';
+const logger = createLogger('DownloadManager');
 export class DownloadManager {
     storageManager;
     integrityChecker;
@@ -85,7 +87,7 @@ export class DownloadManager {
         catch (error) {
             this.activeDownloads.delete(appId);
             if (axios.isCancel(error)) {
-                console.log('Download canceled:', appId);
+                logger.info('Download canceled:', appId);
             }
             else {
                 this.errorCallbacks.forEach(cb => cb(appId, error));

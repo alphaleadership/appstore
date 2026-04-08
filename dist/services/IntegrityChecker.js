@@ -1,5 +1,7 @@
 import * as crypto from 'crypto';
 import * as fs from 'fs';
+import { createLogger } from '../utils/logger.js';
+const logger = createLogger('IntegrityChecker');
 export class IntegrityChecker {
     async calculateChecksum(filePath) {
         return new Promise((resolve, reject) => {
@@ -24,7 +26,7 @@ export class IntegrityChecker {
             return verify.verify(publicKey, signature, 'base64');
         }
         catch (error) {
-            console.error('Error verifying signature:', error);
+            logger.error('Error verifying signature:', error);
             return false;
         }
     }

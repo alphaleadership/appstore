@@ -1,7 +1,9 @@
 import { CatalogueView } from './components/CatalogueView.js';
 import { DownloadedAppsView } from './components/DownloadedAppsView.js';
 import { SettingsView } from './components/SettingsView.js';
-console.log('Renderer process started');
+import { createLogger } from '../utils/logger.js';
+const logger = createLogger('Renderer');
+logger.info('Renderer process started');
 const rootId = 'root';
 const root = document.getElementById(rootId);
 if (root) {
