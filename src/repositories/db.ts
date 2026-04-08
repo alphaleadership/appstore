@@ -2,22 +2,18 @@ import low from 'lowdb';
 import FileSync from 'lowdb/adapters/FileSync.js';
 import * as path from 'path';
 import { app } from 'electron';
-import { Application, DownloadedApp, UserPreferences } from '../models/types.js';
+import { DatabaseSchema } from '../models/types.js';
 
-export interface DatabaseSchema {
-  applications: Application[];
-  downloaded_apps: DownloadedApp[];
-  preferences: UserPreferences;
-}
+// Define the path to the JSON database file
+const userDataPath = app.getPath('userData');
+const dbPath = path.join(userDataPath, 'db.json');
 
-// Ensure initDb uses commonjs require or proper ESM import for lowdb if needed
-// For now, let's keep the standard ESM syntax and see.
+// Setup adapter and lowdb instance
+const adapter = new FileSync<DatabaseSchema>(dbPath);
+export const db = low(adapter);
 
 export function initDb() {
-  const dbPath = path.join(app.getPath('userData'), 'appstore.json');
-  const adapter = new FileSync<DatabaseSchema>(dbPath);
-  const db = low(adapter);
-
+  // Ensure default structure if the JSON file is empty or missing
   db.defaults({
     applications: [],
     downloaded_apps: [],
@@ -25,16 +21,12 @@ export function initDb() {
       downloadFolder: path.join(app.getPath('downloads'), 'ElectronApps'),
       autoUpdate: true,
       enableNotifications: true,
-      theme: 'light' as const,
-      language: 'en',
+      theme: 'dark',
+      language: 'fr',
       maxParallelDownloads: 3,
       enableCompressionTransfer: true
     }
   }).write();
+  
+  console.log(`Database initialized at: ${dbPath}`);
 }
-
-// Note: db exported as a singleton might be tricky in ESM if initialized asynchronously
-// but here it's fine for simple use.
-const dbPath = path.join(app.getPath('userData'), 'appstore.json');
-const adapter = new FileSync<DatabaseSchema>(dbPath);
-export const db = low(adapter);

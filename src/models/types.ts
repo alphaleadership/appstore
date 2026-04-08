@@ -90,3 +90,9 @@ export interface ValidationResult {
   signatureValid: boolean;
   errors: string[];
 }
+
+export interface DatabaseSchema {
+  applications: Application[];
+  downloaded_apps: DownloadedApp[];
+  preferences: UserPreferences;
+}
