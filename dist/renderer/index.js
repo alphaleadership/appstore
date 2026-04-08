@@ -3,9 +3,6 @@ import { DownloadedAppsView } from './components/DownloadedAppsView.js';
 import { SettingsView } from './components/SettingsView.js';
 import { createLogger } from '../utils/logger.js';
 const logger = createLogger('Renderer');
-// @ts-ignore
-const log = window.require('electron-log/renderer');
-log.transports.console.level = 'debug';
 logger.info('Renderer process started');
 const rootId = 'root';
 const root = document.getElementById(rootId);

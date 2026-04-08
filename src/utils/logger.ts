@@ -17,9 +17,18 @@ export class Logger {
       }
     } else {
       try {
-        // Use the main instance
         // @ts-ignore
         const log = require('electron-log');
+        
+        // Initialisation automatique dans le processus Main si ce n'est pas déjà fait
+        if (typeof log.initialize === 'function') {
+          log.initialize();
+        }
+        
+        // Configuration par défaut
+        log.transports.console.level = 'debug';
+        log.transports.file.level = 'info';
+        
         this.logInstance = log;
       } catch (e) {
         this.logInstance = console;

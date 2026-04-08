@@ -4,13 +4,7 @@ import { fileURLToPath } from 'url';
 import { initDb } from '../repositories/db.js';
 import { setupIPC } from './ipc.js';
 import { createLogger } from '../utils/logger.js';
-import log from 'electron-log/main.js';
-// Initialize electron-log for renderer processes
-log.initialize();
-log.transports.console.level = 'debug';
-log.transports.file.level = 'info';
 console.log('Main process starting...');
-log.info('Main process starting with electron-log...');
 const logger = createLogger('MainProcess');
 // Workaround for 'unable to get local issuer certificate'
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
