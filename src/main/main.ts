@@ -8,6 +8,11 @@ import log from 'electron-log/main.js';
 
 // Initialize electron-log for renderer processes
 log.initialize();
+log.transports.console.level = 'debug';
+log.transports.file.level = 'info';
+
+console.log('Main process starting...');
+log.info('Main process starting with electron-log...');
 
 const logger = createLogger('MainProcess');
 

@@ -6,6 +6,10 @@ import { Application, CatalogPage, DownloadedApp, UserPreferences, DiskUsage } f
 
 const logger = createLogger('Renderer');
 
+// @ts-ignore
+const log = (window as any).require('electron-log/renderer');
+log.transports.console.level = 'debug';
+
 logger.info('Renderer process started');
 
 const rootId = 'root';
