@@ -6,7 +6,7 @@ import { createLogger } from '../utils/logger.js';
 const logger = createLogger('UpdateManager');
 
 export class UpdateManager extends EventEmitter {
-  private updateUrl: string = 'https://username.github.io/electron-app-downloader/updates.json';
+  private updateUrl: string = 'https://alphaleadership.github.io/appstore/updates.json';
 
   async checkForUpdates(): Promise<UpdateInfo | null> {
     try {

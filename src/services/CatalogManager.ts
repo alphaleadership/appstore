@@ -12,7 +12,7 @@ export class CatalogManager {
 
   async fetchCatalog(page: number, pageSize: number): Promise<CatalogPage> {
     try {
-      const response = await axios.get(`${this.catalogUrl}?page=${page}&pageSize=${pageSize}`);
+      const response = await axios.get(this.catalogUrl);
       const data = response.data as CatalogPage;
       
       // Cache fetched applications
@@ -20,7 +20,18 @@ export class CatalogManager {
         this.appRepo.save(app);
       }
       
-      return data;
+      // Simulate pagination on client side if needed
+      const allApps = data.applications;
+      const start = (page - 1) * pageSize;
+      const paginatedApps = allApps.slice(start, start + pageSize);
+      
+      return {
+        applications: paginatedApps,
+        totalCount: data.totalCount,
+        pageNumber: page,
+        pageSize: pageSize,
+        hasMore: start + pageSize < allApps.length
+      };
     } catch (error) {
       logger.error('Error fetching catalog:', error);
       // Fallback to local cache if offline
@@ -58,7 +69,7 @@ export class CatalogManager {
     if (cachedApp) return cachedApp;
 
     try {
-      const response = await axios.get(`https://username.github.io/electron-app-downloader/applications/${appId}.json`);
+      const response = await axios.get(`https://alphaleadership.github.io/appstore/applications/${appId}.json`);
       const app = response.data as Application;
       this.appRepo.save(app);
       return app;
