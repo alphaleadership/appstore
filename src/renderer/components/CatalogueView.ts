@@ -67,8 +67,12 @@ export class CatalogueView {
     const card = document.createElement('div');
     card.className = 'app-card';
     card.dataset.id = app.id;
+    
+    // Default placeholder if image fails to load
+    const defaultThumbnail = 'https://raw.githubusercontent.com/alphaleadership/appstore/main/thumbnails/default.png';
+
     card.innerHTML = `
-      <img src="${app.thumbnailUrl}" alt="${app.name}">
+      <img src="${app.thumbnailUrl}" alt="${app.name}" onerror="this.src='${defaultThumbnail}'; this.onerror=null;">
       <h3>${app.name}</h3>
       <p class="version">v${app.version}</p>
       <p class="description">${app.description}</p>

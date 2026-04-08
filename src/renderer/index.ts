@@ -2,6 +2,7 @@ import { CatalogueView } from './components/CatalogueView.js';
 import { DownloadedAppsView } from './components/DownloadedAppsView.js';
 import { SettingsView } from './components/SettingsView.js';
 import { createLogger } from '../utils/logger.js';
+import { Application, CatalogPage, DownloadedApp, UserPreferences, DiskUsage } from '../models/types.js';
 
 const logger = createLogger('Renderer');
 
@@ -23,11 +24,12 @@ const catalogueView = new CatalogueView(rootId);
 const downloadedAppsView = new DownloadedAppsView(rootId);
 const settingsView = new SettingsView(rootId);
 
+const { ipcRenderer } = (window as any).require('electron');
+
+let currentPage = 1;
+const pageSize = 12;
+
 function showView(viewName: 'catalogue' | 'downloaded' | 'settings') {
-  catalogueView.hideLoadingIndicator(); // Ensure it's hidden when switching
-  
-  // Actually I need to add hide/show to CatalogueView too or just toggle container
-  // For now let's just use CSS classes
   const views = {
     catalogue: document.querySelector('.catalogue-container'),
     downloaded: document.querySelector('.downloaded-apps-container'),
@@ -36,74 +38,84 @@ function showView(viewName: 'catalogue' | 'downloaded' | 'settings') {
 
   Object.values(views).forEach(v => v?.classList.add('hidden'));
   views[viewName]?.classList.remove('hidden');
+
+  if (viewName === 'catalogue') {
+    loadCatalog();
+  } else if (viewName === 'downloaded') {
+    loadDownloadedApps();
+  } else if (viewName === 'settings') {
+    loadSettings();
+  }
+}
+
+async function loadCatalog() {
+  catalogueView.showLoadingIndicator();
+  try {
+    const page: CatalogPage = await ipcRenderer.invoke('catalog:fetch', 1, pageSize);
+    catalogueView.displayCatalog(page.applications);
+    currentPage = 1;
+  } catch (error) {
+    logger.error('Failed to load catalog', error);
+  } finally {
+    catalogueView.hideLoadingIndicator();
+  }
+}
+
+async function loadDownloadedApps() {
+  try {
+    const apps: DownloadedApp[] = await ipcRenderer.invoke('storage:getDownloadedApps');
+    downloadedAppsView.displayDownloadedApps(apps);
+  } catch (error) {
+    logger.error('Failed to load downloaded apps', error);
+  }
+}
+
+async function loadSettings() {
+  try {
+    const usage: DiskUsage = await ipcRenderer.invoke('storage:getDiskUsage');
+    settingsView.displayDiskUsage(usage);
+    
+    // Preferences are usually loaded from storage manager in Main, but let's assume we have them
+    // For now we use hardcoded defaults if not exposed via IPC yet
+    settingsView.displayPreferences({
+      downloadFolder: '',
+      autoUpdate: true,
+      enableNotifications: true,
+      theme: 'dark',
+      language: 'fr',
+      maxParallelDownloads: 3,
+      enableCompressionTransfer: true
+    });
+  } catch (error) {
+    logger.error('Failed to load settings', error);
+  }
 }
 
 document.getElementById('nav-catalogue')?.addEventListener('click', () => showView('catalogue'));
 document.getElementById('nav-downloaded')?.addEventListener('click', () => showView('downloaded'));
 document.getElementById('nav-settings')?.addEventListener('click', () => showView('settings'));
 
-// Initialize with Catalogue
+// Initialize
 showView('catalogue');
 
-// Mock data
-catalogueView.displayCatalog([
-  {
-    id: 'app-001',
-    name: 'VS Code',
-    version: '1.85.0',
-    description: 'Code editor',
-    category: 'Development',
-    author: 'Microsoft',
-    downloadUrl: 'https://update.code.visualstudio.com/latest/win32-x64-user/stable',
-    fileSize: 150000000,
-    checksum: 'sha256:abc123',
-    signature: 'sig123',
-    publicKey: 'key123',
-    thumbnailUrl: 'https://via.placeholder.com/250x150',
-    releaseDate: '2024-01-15',
-    downloadCount: 50000,
-    rating: 4.8,
-    tags: ['editor', 'development', 'code']
-  }
-]);
-
-downloadedAppsView.displayDownloadedApps([
-  {
-    id: 'd-001',
-    appId: 'app-001',
-    name: 'VS Code',
-    version: '1.84.0',
-    filePath: '/path/to/vscode.exe',
-    fileSize: 140000000,
-    downloadedAt: new Date().toISOString(),
-    status: 'completed',
-    checksum: 'sha256:abc123',
-    isRunning: false
-  }
-]);
-
-settingsView.displayPreferences({
-  downloadFolder: '/downloads/ElectronApps',
-  autoUpdate: true,
-  enableNotifications: true,
-  theme: 'light',
-  language: 'en',
-  maxParallelDownloads: 3,
-  enableCompressionTransfer: true
-});
-
-settingsView.displayDiskUsage({
-  usedBytes: 500 * 1024 * 1024,
-  availableBytes: 5000 * 1024 * 1024,
-  totalBytes: 10000 * 1024 * 1024
-});
-
-const { ipcRenderer } = (window as any).require('electron');
-
+// Event Handlers
 catalogueView.onDownload = async (appId) => {
   const app = catalogueView.getAppById(appId);
   if (app) {
     await ipcRenderer.invoke('download:start', appId, app.downloadUrl);
+  }
+};
+
+catalogueView.onSearch = async (query) => {
+  if (!query) {
+    loadCatalog();
+    return;
+  }
+  try {
+    const apps: Application[] = await ipcRenderer.invoke('catalog:search', query);
+    catalogueView.displayCatalog(apps);
+  } catch (error) {
+    logger.error('Search failed', error);
   }
 };
 
@@ -113,4 +125,9 @@ ipcRenderer.on('download:progress', (event: any, progress: any) => {
 
 ipcRenderer.on('download:error', (event: any, { appId, error }: { appId: string, error: string }) => {
   catalogueView.showError(`Download failed for app ${appId}: ${error}`);
+});
+
+ipcRenderer.on('download:complete', (event: any, appId: string) => {
+  logger.info(`Download complete for app: ${appId}`);
+  loadDownloadedApps(); // Refresh downloaded list if visible
 });

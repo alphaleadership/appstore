@@ -3,7 +3,7 @@ import { EventEmitter } from 'events';
 import { createLogger } from '../utils/logger.js';
 const logger = createLogger('UpdateManager');
 export class UpdateManager extends EventEmitter {
-    updateUrl = 'https://username.github.io/electron-app-downloader/updates.json';
+    updateUrl = 'https://alphaleadership.github.io/appstore/updates.json';
     async checkForUpdates() {
         try {
             const response = await axios.get(this.updateUrl);
