@@ -8,12 +8,20 @@
     "copy-assets": "node -e \"const fs=require('fs'); if(!fs.existsSync('dist/renderer')) fs.mkdirSync('dist/renderer', {recursive:true}); fs.copyFileSync('src/renderer/index.html', 'dist/renderer/index.html'); fs.copyFileSync('src/renderer/style.css', 'dist/renderer/style.css');\"",
     "watch": "tsc --watch",
     "start": "npm run build && electron .",
-    "dist": "npm run build && electron-builder",
+    "dist": "npm run build && electron-builder --publish always",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
   },
   "build": {
     "npmRebuild": false,
     "appId": "com.electron.appdownloader",
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "alphaleadership",
+        "repo": "appstore",
+        "releaseType": "draft"
+      }
+    ],
     "win": {
       "target": "portable"
     },
