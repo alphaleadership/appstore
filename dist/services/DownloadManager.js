@@ -75,8 +75,9 @@ export class DownloadManager {
                 fileStream.end();
                 fs.renameSync(partPath, filePath);
                 this.activeDownloads.delete(appId);
+                const finalSize = fs.statSync(filePath).size;
                 // Finalize
-                this.completeCallbacks.forEach(cb => cb(appId));
+                this.completeCallbacks.forEach(cb => cb(appId, filePath, finalSize));
             });
             response.data.on('error', (err) => {
                 fileStream.end();

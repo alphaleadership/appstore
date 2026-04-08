@@ -31,7 +31,22 @@ export function setupIPC() {
     downloadManager.onProgressUpdate((progress) => {
         eventSender('download:progress', progress);
     });
-    downloadManager.onDownloadComplete((appId) => {
+    downloadManager.onDownloadComplete(async (appId, filePath, fileSize) => {
+        const app = appRepo.findById(appId);
+        if (app) {
+            await storageManager.saveDownloadedApp({
+                id: `d-${appId}-${Date.now()}`,
+                appId: appId,
+                name: app.name,
+                version: app.version,
+                filePath: filePath,
+                fileSize: fileSize,
+                downloadedAt: new Date().toISOString(),
+                status: 'completed',
+                checksum: app.checksum,
+                isRunning: false
+            });
+        }
         eventSender('download:complete', appId);
     });
     downloadManager.onDownloadError((appId, error) => {

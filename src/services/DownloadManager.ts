@@ -11,7 +11,7 @@ const logger = createLogger('DownloadManager');
 export class DownloadManager {
   private activeDownloads: Map<string, any> = new Map();
   private progressCallbacks: Set<(progress: DownloadProgress) => void> = new Set();
-  private completeCallbacks: Set<(appId: string) => void> = new Set();
+  private completeCallbacks: Set<(appId: string, filePath: string, fileSize: number) => void> = new Set();
   private errorCallbacks: Set<(appId: string, error: Error) => void> = new Set();
 
   constructor(
@@ -93,8 +93,9 @@ export class DownloadManager {
         fs.renameSync(partPath, filePath);
         this.activeDownloads.delete(appId);
         
+        const finalSize = fs.statSync(filePath).size;
         // Finalize
-        this.completeCallbacks.forEach(cb => cb(appId));
+        this.completeCallbacks.forEach(cb => cb(appId, filePath, finalSize));
       });
 
       response.data.on('error', (err: any) => {
@@ -125,7 +126,7 @@ export class DownloadManager {
     this.progressCallbacks.add(callback);
   }
 
-  onDownloadComplete(callback: (appId: string) => void): void {
+  onDownloadComplete(callback: (appId: string, filePath: string, fileSize: number) => void): void {
     this.completeCallbacks.add(callback);
   }
 
