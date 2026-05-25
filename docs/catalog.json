@@ -239,11 +239,11 @@
     {
       "id": "app-011",
       "name": "Brave Browser",
-      "version": "1.90.125",
+      "version": "1.90.124",
       "description": "Secure, Fast & Private Web Browser with Adblocker.",
       "category": "Utility",
       "author": "Brave Software",
-      "downloadUrl": "https://github.com/brave/brave-browser/releases/tag/v1.90.125",
+      "downloadUrl": "https://github.com/brave/brave-browser/releases/download/v1.90.124/brave-v1.90.124-darwin-arm64-symbols.zip",
       "repository": "https://github.com/brave/brave-browser",
       "fileSize": 1100000,
       "checksum": "sha256:br4v3_br0ws3r",
