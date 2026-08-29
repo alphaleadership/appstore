@@ -309,11 +309,11 @@
     {
       "id": "youtube-public",
       "name": "YouTube Public",
-      "version": "1.16.4",
+      "version": "1.16.5",
       "description": "YouTube Public application.",
       "category": "Multimedia",
       "author": "Thomas Iniguez Visioli",
-      "downloadUrl": "https://github.com/thomas-iniguez-visioli/youtube-public/releases/download/v1.16.4/youtube-1.16.4-win.zip",
+      "downloadUrl": "https://github.com/thomas-iniguez-visioli/youtube-public/releases/download/v1.16.5/youtube-1.16.5-win.zip",
       "repository": "https://github.com/thomas-iniguez-visioli/youtube-public",
       "fileSize": 0,
       "checksum": "",
