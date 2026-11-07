@@ -6,11 +6,11 @@
     {
       "id": "app-001",
       "name": "VS Code",
-      "version": "1.145.1",
+      "version": "1.145.2",
       "description": "Code editing. Redefined.",
       "category": "Development",
       "author": "Microsoft",
-      "downloadUrl": "https://github.com/microsoft/vscode/releases/tag/1.145.1",
+      "downloadUrl": "https://github.com/microsoft/vscode/releases/tag/1.145.2",
       "repository": "https://github.com/microsoft/vscode",
       "fileSize": 150000000,
       "checksum": "sha256:abc1234567890abcdef",
